@@ -25,9 +25,6 @@ doc_events = {
 		"before_insert": "bzo.address.address.set_quick_entry_divisions",
 		"validate": "bzo.customer.customer.validate",
 	},
-	"Supplier": {
-		"before_insert": "bzo.address.address.set_quick_entry_divisions",
-	},
 	"Address": {
 		"validate": "bzo.address.address.validate",
 	},

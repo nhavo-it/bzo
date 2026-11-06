@@ -4,7 +4,7 @@ VIETNAM = "Vietnam"
 
 
 def set_quick_entry_divisions(doc, method=None):
-	"""Customer/Supplier before_insert: ERPNext make_address() drops custom fields, so hand them to Address.validate."""
+	"""Customer before_insert: ERPNext make_address() drops custom fields, so hand them to Address.validate."""
 	province, ward = doc.get("custom_province"), doc.get("custom_ward")
 	if doc.get("country") != VIETNAM or not doc.get("address_line1") or not (province or ward):
 		return
