@@ -8,9 +8,11 @@ app_license = "mit"
 # Ung dung phu thuoc
 required_apps = ["frappe", "erpnext"]
 
+# Quick Entry Customer/Supplier: them Tinh/Thanh + Xa/Phuong
+app_include_js = "/assets/bzo/js/quick_entry.js"
+
 # JS mo rong form cua DocType co san
 doctype_js = {
-	"Customer": "public/js/customer.js",
 	"Address": "public/js/address.js",
 }
 
@@ -20,7 +22,11 @@ doc_events = {
 		"on_update": "bzo.accounting.company.on_update",
 	},
 	"Customer": {
+		"before_insert": "bzo.address.address.set_quick_entry_divisions",
 		"validate": "bzo.customer.customer.validate",
+	},
+	"Supplier": {
+		"before_insert": "bzo.address.address.set_quick_entry_divisions",
 	},
 	"Address": {
 		"validate": "bzo.address.address.validate",

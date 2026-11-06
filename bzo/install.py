@@ -76,6 +76,7 @@ def setup_all():
 	create_custom_fields(CUSTOM_FIELDS, update=True)
 	make_property_setters()
 	create_vietnam_address_template()
+	add_contacts_sidebar_items()
 
 	from bzo.address.vn_divisions import import_divisions
 
@@ -96,6 +97,36 @@ def create_vietnam_address_template():
 	frappe.get_doc(
 		{"doctype": "Address Template", "country": "Vietnam", "template": ADDRESS_TEMPLATE}
 	).insert(ignore_permissions=True)
+
+
+CONTACTS_SIDEBAR_ITEMS = [
+	{"type": "Link", "label": "Province", "link_type": "DocType", "link_to": "Province", "icon": "map"},
+	{"type": "Link", "label": "Ward", "link_type": "DocType", "link_to": "Ward", "icon": "map-pinned"},
+]
+
+
+def add_contacts_sidebar_items():
+	"""Them Province/Ward vao sidebar Contacts qua lop Custom Sidebar cua site (Sidebar goc thuoc frappe)."""
+	from frappe.desk.doctype.custom_sidebar.custom_sidebar import (
+		SITE_LAYER,
+		add_site_sidebar_item,
+		get_customization,
+	)
+
+	if get_customization("Contacts", None):
+		# Site already arranged this sidebar: append without touching its order
+		for item in CONTACTS_SIDEBAR_ITEMS:
+			add_site_sidebar_item("Contacts", item)
+		return
+
+	doc = frappe.new_doc("Custom Sidebar")
+	doc.module = "Contacts"
+	doc.user = SITE_LAYER
+	# Reference to the base Address row, so the added rows land right after it
+	doc.append("sidebar_items", {"type": "Link", "link_type": "DocType", "link_to": "Address"})
+	for item in CONTACTS_SIDEBAR_ITEMS:
+		doc.append("sidebar_items", {**item, "added": 1})
+	doc.save(ignore_permissions=True)
 
 
 def before_uninstall():

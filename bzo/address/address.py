@@ -3,8 +3,24 @@ import frappe
 VIETNAM = "Vietnam"
 
 
+def set_quick_entry_divisions(doc, method=None):
+	"""Customer/Supplier before_insert: ERPNext make_address() drops custom fields, so hand them to Address.validate."""
+	province, ward = doc.get("custom_province"), doc.get("custom_ward")
+	if doc.get("country") != VIETNAM or not doc.get("address_line1") or not (province or ward):
+		return
+
+	if ward:
+		# make_address() requires city
+		doc.city = frappe.db.get_value("Ward", ward, "ward_name")
+	frappe.flags.bzo_quick_entry_divisions = (province, ward)
+
+
 def validate(doc, method=None):
 	"""Sync custom_province/custom_ward -> state/city on Address (2-level administrative model)."""
+	divisions = frappe.flags.pop("bzo_quick_entry_divisions", None)
+	if divisions and doc.is_new() and not (doc.custom_province or doc.custom_ward):
+		doc.custom_province, doc.custom_ward = divisions
+
 	if doc.country != VIETNAM:
 		return
 

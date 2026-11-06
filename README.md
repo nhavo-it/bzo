@@ -9,9 +9,8 @@ Ung dung tuy chinh cho ERPNext 16 (Frappe Framework v16).
 - `bzo/accounting/`: he thong tai khoan TT99/2025 (`data/vn_tt99.json`), nap vao ERPNext (`chart_of_accounts.py`), mau thue VAT (`tax_templates.py`), event Company (`company.py`)
 - `bzo/address/`: Address (`address.py`), nhap 34 tinh va 3321 xa/phuong (`vn_divisions.py`, `data/vn_divisions.json`)
 - `bzo/customer/`: validate Customer
-- `bzo/public/js/`: JS mo rong form Customer, Address
-- `bzo/bzo/doctype/`: `bzo_request`, `province`, `ward`
-- `bzo/bzo/report/bzo_request_summary`: Script Report + bieu do
+- `bzo/public/js/`: JS mo rong form Address
+- `bzo/bzo/doctype/`: `province`, `ward`
 - `bzo/fixtures/`, `bzo/translations/`, `bzo/patches/`, `bzo/patches.txt`
 
 ## Cai dat moi truong (Windows -> WSL2 Ubuntu 24.04)
