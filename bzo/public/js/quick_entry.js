@@ -47,8 +47,23 @@ frappe.provide("frappe.ui.form");
 
 	proto.render_dialog = function () {
 		render_dialog.call(this);
+		bzo_bind_divisions(this.dialog);
+	};
 
-		const d = this.dialog;
+	// Quick Entry cua chinh Address (vd. "+ Tao Address" tu o Link)
+	frappe.ui.form.AddressQuickEntryForm = class AddressQuickEntryForm extends (
+		frappe.ui.form.QuickEntryForm
+	) {
+		render_dialog() {
+			super.render_dialog();
+			if (!this.dialog.get_value("country")) {
+				this.dialog.set_value("country", "Vietnam");
+			}
+			bzo_bind_divisions(this.dialog);
+		}
+	};
+
+	function bzo_bind_divisions(d) {
 		const province = d.fields_dict.custom_province;
 		const ward = d.fields_dict.custom_ward;
 		if (!province || !ward) return;
@@ -77,5 +92,5 @@ frappe.provide("frappe.ui.form");
 				}
 			});
 		};
-	};
+	}
 })();

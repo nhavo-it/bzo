@@ -33,6 +33,7 @@ CUSTOM_FIELDS = {
 			"depends_on": VN,
 			"mandatory_depends_on": VN,
 			"in_standard_filter": 1,
+			"allow_in_quick_entry": 1,
 		},
 		{
 			"fieldname": "custom_ward",
@@ -43,6 +44,7 @@ CUSTOM_FIELDS = {
 			"depends_on": VN,
 			"mandatory_depends_on": VN,
 			"in_standard_filter": 1,
+			"allow_in_quick_entry": 1,
 		},
 	],
 }
@@ -51,6 +53,8 @@ CUSTOM_FIELDS = {
 PROPERTY_SETTERS = [
 	# VN addresses have no district level; city/state are auto-filled from Ward/Province
 	("Address", "city", "reqd", 0, "Check"),
+	# Quick entry only shows reqd fields, so keep City there for non-VN addresses
+	("Address", "city", "allow_in_quick_entry", 1, "Check"),
 	("Address", "city", "mandatory_depends_on", NOT_VN, "Small Text"),
 	("Address", "city", "depends_on", NOT_VN, "Small Text"),
 	("Address", "state", "depends_on", NOT_VN, "Small Text"),
@@ -105,27 +109,43 @@ CONTACTS_SIDEBAR_ITEMS = [
 ]
 
 
+# Base rows of frappe's Contacts sidebar that come before our items
+CONTACTS_SIDEBAR_BEFORE = ["Address", "Contact", "Address Template", "Gender", "Salutation"]
+
+
 def add_contacts_sidebar_items():
-	"""Them Province/Ward vao sidebar Contacts qua lop Custom Sidebar cua site (Sidebar goc thuoc frappe)."""
-	from frappe.desk.doctype.custom_sidebar.custom_sidebar import (
-		SITE_LAYER,
-		add_site_sidebar_item,
-		get_customization,
-	)
+	"""Them Province/Ward sau Salutation trong sidebar Contacts, qua lop Custom Sidebar cua site."""
+	from frappe.desk.doctype.custom_sidebar.custom_sidebar import SITE_LAYER
 
-	if get_customization("Contacts", None):
-		# Site already arranged this sidebar: append without touching its order
-		for item in CONTACTS_SIDEBAR_ITEMS:
-			add_site_sidebar_item("Contacts", item)
-		return
+	ours = {item["link_to"] for item in CONTACTS_SIDEBAR_ITEMS}
 
-	doc = frappe.new_doc("Custom Sidebar")
-	doc.module = "Contacts"
-	doc.user = SITE_LAYER
-	# Reference to the base Address row, so the added rows land right after it
-	doc.append("sidebar_items", {"type": "Link", "link_type": "DocType", "link_to": "Address"})
-	for item in CONTACTS_SIDEBAR_ITEMS:
-		doc.append("sidebar_items", {**item, "added": 1})
+	def is_doctype_row(row, name):
+		return row.get("link_type") == "DocType" and row.get("link_to") == name
+
+	name = frappe.db.exists("Custom Sidebar", {"module": "Contacts", "user": ["in", ["", None]]})
+	if name:
+		doc = frappe.get_doc("Custom Sidebar", name)
+	else:
+		doc = frappe.new_doc("Custom Sidebar")
+		doc.module = "Contacts"
+		doc.user = SITE_LAYER
+
+	items = [
+		row.as_dict(no_default_fields=True)
+		for row in doc.sidebar_items
+		if not (row.link_type == "DocType" and row.link_to in ours)
+	]
+	# A layer only positions the rows it names, so name the base rows up to Salutation
+	for dt in CONTACTS_SIDEBAR_BEFORE:
+		if not any(is_doctype_row(row, dt) for row in items):
+			items.append({"type": "Link", "link_type": "DocType", "link_to": dt})
+
+	pos = next(i for i, row in enumerate(items) if is_doctype_row(row, "Salutation")) + 1
+	items[pos:pos] = [{**item, "added": 1} for item in CONTACTS_SIDEBAR_ITEMS]
+
+	doc.set("sidebar_items", [])
+	for row in items:
+		doc.append("sidebar_items", row)
 	doc.save(ignore_permissions=True)
 
 
