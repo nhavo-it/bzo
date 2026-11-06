@@ -1,54 +1,66 @@
-// Them Tinh/Thanh + Xa/Phuong vao Quick Entry cua Customer/Supplier (ERPNext dung chung ContactAddressQuickEntryForm)
+// Them Tinh/Thanh + Xa/Phuong vao Quick Entry cua Customer/Supplier
 frappe.provide("frappe.ui.form");
 
 (() => {
 	const VN = "eval:doc.country_address=='Vietnam'";
 	const NOT_VN = "eval:doc.country_address!='Vietnam'";
-	const proto = frappe.ui.form.ContactAddressQuickEntryForm.prototype;
-	const get_variant_fields = proto.get_variant_fields;
-	const render_dialog = proto.render_dialog;
 
-	proto.get_variant_fields = function () {
-		const fields = get_variant_fields.call(this);
+	// ERPNext usually aliases both to ContactAddressQuickEntryForm, but some builds ship separate classes
+	const patched = new Set();
+	for (const name of ["ContactAddressQuickEntryForm", "CustomerQuickEntryForm", "SupplierQuickEntryForm"]) {
+		const proto = frappe.ui.form[name]?.prototype;
+		if (!proto?.get_variant_fields || patched.has(proto)) continue;
+		patched.add(proto);
+		patch_party_quick_entry(proto);
+	}
 
-		for (const df of fields) {
-			if (["address_line2", "pincode", "city", "state"].includes(df.fieldname)) {
-				df.depends_on = NOT_VN;
+	function patch_party_quick_entry(proto) {
+		const get_variant_fields = proto.get_variant_fields;
+		const render_dialog = proto.render_dialog;
+
+		proto.get_variant_fields = function () {
+			const fields = get_variant_fields.call(this);
+			if (fields.some((df) => df.fieldname === "custom_province")) return fields;
+
+			for (const df of fields) {
+				if (["address_line2", "pincode", "city", "state"].includes(df.fieldname)) {
+					df.depends_on = NOT_VN;
+				}
+				if (df.fieldname === "city") {
+					df.mandatory_depends_on =
+						"eval:doc.country_address!='Vietnam' && (doc.country_address || doc.address_line1)";
+				}
 			}
-			if (df.fieldname === "city") {
-				df.mandatory_depends_on =
-					"eval:doc.country_address!='Vietnam' && (doc.country_address || doc.address_line1)";
-			}
-		}
 
-		const idx = fields.findIndex((df) => df.fieldname === "country_address");
-		fields.splice(
-			idx + 1,
-			0,
-			{
-				label: __("Province/City"),
-				fieldname: "custom_province",
-				fieldtype: "Link",
-				options: "Province",
-				depends_on: VN,
-				mandatory_depends_on: VN,
-			},
-			{
-				label: __("Ward/Commune/Special Zone"),
-				fieldname: "custom_ward",
-				fieldtype: "Link",
-				options: "Ward",
-				depends_on: VN,
-				mandatory_depends_on: VN,
-			}
-		);
-		return fields;
-	};
+			const idx = fields.findIndex((df) => df.fieldname === "country_address");
+			fields.splice(
+				idx === -1 ? fields.length : idx + 1,
+				0,
+				{
+					label: __("Province/City"),
+					fieldname: "custom_province",
+					fieldtype: "Link",
+					options: "Province",
+					depends_on: VN,
+					mandatory_depends_on: VN,
+				},
+				{
+					label: __("Ward/Commune/Special Zone"),
+					fieldname: "custom_ward",
+					fieldtype: "Link",
+					options: "Ward",
+					depends_on: VN,
+					mandatory_depends_on: VN,
+				}
+			);
+			return fields;
+		};
 
-	proto.render_dialog = function () {
-		render_dialog.call(this);
-		bzo_bind_divisions(this.dialog);
-	};
+		proto.render_dialog = function () {
+			render_dialog.call(this);
+			bzo_bind_divisions(this.dialog);
+		};
+	}
 
 	// Quick Entry cua chinh Address (vd. "+ Tao Address" tu o Link)
 	frappe.ui.form.AddressQuickEntryForm = class AddressQuickEntryForm extends (
