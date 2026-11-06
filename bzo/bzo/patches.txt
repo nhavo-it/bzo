@@ -1,0 +1,5 @@
+[pre_model_sync]
+# Patches chay truoc khi dong bo DocType
+
+[post_model_sync]
+# Patches chay sau khi dong bo DocType

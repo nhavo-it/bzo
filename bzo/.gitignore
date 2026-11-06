@@ -1,0 +1,9 @@
+*.pyc
+*.egg-info
+*.swp
+tags
+node_modules
+__pycache__
+.vscode
+.idea
+bzo/public/dist

@@ -1,0 +1,587 @@
+{
+  "name": "Vietnam - Chart of Accounts (TT99/2025)",
+  "country_code": "vn",
+  "tree": {
+    "Tài sản": {
+      "root_type": "Asset",
+      "is_group": 1,
+      "Tiền mặt": {
+        "account_number": "111",
+        "account_type": "Cash",
+        "Tiền Việt Nam": {
+          "account_number": "1111",
+          "account_type": "Cash"
+        },
+        "Ngoại tệ": {
+          "account_number": "1112",
+          "account_type": "Cash"
+        }
+      },
+      "Tiền gửi không kỳ hạn": {
+        "account_number": "112",
+        "account_type": "Bank",
+        "Tiền Việt Nam": {
+          "account_number": "1121",
+          "account_type": "Bank"
+        },
+        "Ngoại tệ": {
+          "account_number": "1122",
+          "account_type": "Bank"
+        }
+      },
+      "Tiền đang chuyển": {
+        "account_number": "113"
+      },
+      "Chứng khoán kinh doanh": {
+        "account_number": "121"
+      },
+      "Đầu tư nắm giữ đến ngày đáo hạn": {
+        "account_number": "128",
+        "Tiền gửi có kỳ hạn": {
+          "account_number": "1281"
+        },
+        "Các khoản đầu tư khác nắm giữ đến ngày đáo hạn": {
+          "account_number": "1288"
+        }
+      },
+      "Phải thu của khách hàng": {
+        "account_number": "131",
+        "account_type": "Receivable"
+      },
+      "Thuế GTGT được khấu trừ": {
+        "account_number": "133",
+        "account_type": "Tax",
+        "Thuế GTGT được khấu trừ của hàng hóa, dịch vụ": {
+          "account_number": "1331",
+          "account_type": "Tax"
+        },
+        "Thuế GTGT được khấu trừ của TSCĐ": {
+          "account_number": "1332",
+          "account_type": "Tax"
+        }
+      },
+      "Phải thu nội bộ": {
+        "account_number": "136"
+      },
+      "Phải thu khác": {
+        "account_number": "138",
+        "Tài sản thiếu chờ xử lý": {
+          "account_number": "1381"
+        },
+        "Phải thu khác": {
+          "account_number": "1388"
+        }
+      },
+      "Tạm ứng": {
+        "account_number": "141"
+      },
+      "Nguyên liệu, vật liệu": {
+        "account_number": "152",
+        "account_type": "Stock"
+      },
+      "Công cụ, dụng cụ": {
+        "account_number": "153",
+        "account_type": "Stock"
+      },
+      "Chi phí sản xuất kinh doanh dở dang": {
+        "account_number": "154",
+        "account_type": "Stock"
+      },
+      "Sản phẩm": {
+        "account_number": "155",
+        "account_type": "Stock",
+        "Sản phẩm nhập kho": {
+          "account_number": "1551",
+          "account_type": "Stock"
+        },
+        "Sản phẩm gửi đi bán": {
+          "account_number": "1557",
+          "account_type": "Stock"
+        }
+      },
+      "Hàng hóa": {
+        "account_number": "156",
+        "account_type": "Stock",
+        "Giá mua hàng hóa": {
+          "account_number": "1561",
+          "account_type": "Stock"
+        },
+        "Chi phí thu mua hàng hóa": {
+          "account_number": "1562"
+        },
+        "Hàng hóa gửi đi bán": {
+          "account_number": "1567",
+          "account_type": "Stock"
+        }
+      },
+      "Tài sản cố định": {
+        "account_number": "211",
+        "account_type": "Fixed Asset",
+        "TSCĐ hữu hình": {
+          "account_number": "2111",
+          "account_type": "Fixed Asset"
+        },
+        "TSCĐ thuê tài chính": {
+          "account_number": "2112",
+          "account_type": "Fixed Asset"
+        },
+        "TSCĐ vô hình": {
+          "account_number": "2113",
+          "account_type": "Fixed Asset"
+        },
+        "Bất động sản đầu tư": {
+          "account_number": "2114",
+          "account_type": "Fixed Asset"
+        }
+      },
+      "Hao mòn tài sản cố định": {
+        "account_number": "214",
+        "account_type": "Accumulated Depreciation",
+        "Hao mòn TSCĐ hữu hình": {
+          "account_number": "2141",
+          "account_type": "Accumulated Depreciation"
+        },
+        "Hao mòn TSCĐ thuê tài chính": {
+          "account_number": "2142",
+          "account_type": "Accumulated Depreciation"
+        },
+        "Hao mòn TSCĐ vô hình": {
+          "account_number": "2143",
+          "account_type": "Accumulated Depreciation"
+        },
+        "Hao mòn bất động sản đầu tư": {
+          "account_number": "2147",
+          "account_type": "Accumulated Depreciation"
+        }
+      },
+      "Tài sản sinh học": {
+        "account_number": "215",
+        "account_type": "Fixed Asset",
+        "Súc vật nuôi cho sản phẩm định kỳ": {
+          "account_number": "2151",
+          "account_type": "Fixed Asset"
+        },
+        "Súc vật nuôi lấy sản phẩm một lần": {
+          "account_number": "2152",
+          "account_type": "Fixed Asset"
+        },
+        "Cây trồng theo mùa vụ": {
+          "account_number": "2153",
+          "account_type": "Fixed Asset"
+        }
+      },
+      "Đầu tư vào công ty con, liên doanh, liên kết": {
+        "account_number": "221",
+        "Đầu tư vào công ty con": {
+          "account_number": "2211"
+        },
+        "Đầu tư vào công ty liên doanh": {
+          "account_number": "2212"
+        },
+        "Đầu tư vào công ty liên kết": {
+          "account_number": "2213"
+        }
+      },
+      "Đầu tư khác": {
+        "account_number": "228",
+        "Đầu tư góp vốn vào đơn vị khác": {
+          "account_number": "2281"
+        },
+        "Đầu tư khác": {
+          "account_number": "2288"
+        }
+      },
+      "Dự phòng tổn thất tài sản": {
+        "account_number": "229",
+        "Dự phòng giảm giá chứng khoán kinh doanh": {
+          "account_number": "2291"
+        },
+        "Dự phòng tổn thất đầu tư vào đơn vị khác": {
+          "account_number": "2292"
+        },
+        "Dự phòng phải thu khó đòi": {
+          "account_number": "2293"
+        },
+        "Dự phòng giảm giá hàng tồn kho": {
+          "account_number": "2294"
+        }
+      },
+      "Xây dựng cơ bản dở dang": {
+        "account_number": "241",
+        "account_type": "Capital Work in Progress",
+        "Mua sắm TSCĐ": {
+          "account_number": "2411"
+        },
+        "Xây dựng cơ bản": {
+          "account_number": "2412"
+        },
+        "Sửa chữa lớn TSCĐ": {
+          "account_number": "2413"
+        }
+      },
+      "Chi phí trả sau": {
+        "account_number": "242"
+      },
+      "Cầm cố, thế chấp, ký quỹ, ký cược": {
+        "account_number": "244"
+      }
+    },
+    "Nợ phải trả": {
+      "root_type": "Liability",
+      "is_group": 1,
+      "Phải trả cho người bán": {
+        "account_number": "331",
+        "account_type": "Payable"
+      },
+      "Phải trả cổ tức, lợi nhuận": {
+        "account_number": "332",
+        "account_type": "Payable"
+      },
+      "Thuế và các khoản phải nộp Nhà nước": {
+        "account_number": "333",
+        "account_type": "Tax",
+        "Thuế giá trị gia tăng phải nộp": {
+          "account_number": "3331",
+          "account_type": "Tax",
+          "Thuế GTGT đầu ra": {
+            "account_number": "33311",
+            "account_type": "Tax"
+          },
+          "Thuế GTGT hàng nhập khẩu": {
+            "account_number": "33312",
+            "account_type": "Tax"
+          }
+        },
+        "Thuế tiêu thụ đặc biệt": {
+          "account_number": "3332",
+          "account_type": "Tax"
+        },
+        "Thuế xuất, nhập khẩu": {
+          "account_number": "3333",
+          "account_type": "Tax"
+        },
+        "Thuế thu nhập doanh nghiệp": {
+          "account_number": "3334",
+          "account_type": "Tax"
+        },
+        "Thuế thu nhập cá nhân": {
+          "account_number": "3335",
+          "account_type": "Tax"
+        },
+        "Thuế tài nguyên": {
+          "account_number": "3336",
+          "account_type": "Tax"
+        },
+        "Thuế nhà đất, tiền thuê đất": {
+          "account_number": "3337",
+          "account_type": "Tax"
+        },
+        "Các loại thuế khác": {
+          "account_number": "3338",
+          "account_type": "Tax"
+        },
+        "Phí, lệ phí và các khoản phải nộp khác": {
+          "account_number": "3339",
+          "account_type": "Tax"
+        }
+      },
+      "Phải trả người lao động": {
+        "account_number": "334",
+        "Phải trả công nhân viên": {
+          "account_number": "3341"
+        },
+        "Phải trả người lao động khác": {
+          "account_number": "3348"
+        }
+      },
+      "Chi phí phải trả": {
+        "account_number": "335"
+      },
+      "Phải trả nội bộ": {
+        "account_number": "336"
+      },
+      "Phải trả, phải nộp khác": {
+        "account_number": "338",
+        "Tài sản thừa chờ giải quyết": {
+          "account_number": "3381"
+        },
+        "Kinh phí công đoàn": {
+          "account_number": "3382"
+        },
+        "Bảo hiểm xã hội": {
+          "account_number": "3383"
+        },
+        "Bảo hiểm y tế": {
+          "account_number": "3384"
+        },
+        "Bảo hiểm thất nghiệp": {
+          "account_number": "3386"
+        },
+        "Doanh thu chưa thực hiện": {
+          "account_number": "3387"
+        },
+        "Phải trả, phải nộp khác": {
+          "account_number": "3388"
+        }
+      },
+      "Vay và nợ thuê tài chính": {
+        "account_number": "341",
+        "Các khoản đi vay": {
+          "account_number": "3411"
+        },
+        "Nợ thuê tài chính": {
+          "account_number": "3412"
+        }
+      },
+      "Nhận ký quỹ, ký cược": {
+        "account_number": "344"
+      },
+      "Dự phòng phải trả": {
+        "account_number": "352",
+        "Dự phòng bảo hành sản phẩm hàng hóa": {
+          "account_number": "3521"
+        },
+        "Dự phòng bảo hành công trình xây dựng": {
+          "account_number": "3522"
+        },
+        "Dự phòng phải trả khác": {
+          "account_number": "3524"
+        }
+      },
+      "Quỹ khen thưởng, phúc lợi": {
+        "account_number": "353",
+        "Quỹ khen thưởng": {
+          "account_number": "3531"
+        },
+        "Quỹ phúc lợi": {
+          "account_number": "3532"
+        }
+      }
+    },
+    "Vốn chủ sở hữu": {
+      "root_type": "Equity",
+      "is_group": 1,
+      "Vốn đầu tư của chủ sở hữu": {
+        "account_number": "411",
+        "account_type": "Equity",
+        "Vốn góp của chủ sở hữu": {
+          "account_number": "4111",
+          "account_type": "Equity"
+        },
+        "Thặng dư vốn": {
+          "account_number": "4112",
+          "account_type": "Equity"
+        },
+        "Vốn khác": {
+          "account_number": "4118",
+          "account_type": "Equity"
+        }
+      },
+      "Chênh lệch đánh giá lại tài sản": {
+        "account_number": "412"
+      },
+      "Chênh lệch tỷ giá hối đoái": {
+        "account_number": "413"
+      },
+      "Quỹ đầu tư phát triển": {
+        "account_number": "414"
+      },
+      "Các quỹ khác thuộc vốn chủ sở hữu": {
+        "account_number": "418"
+      },
+      "Cổ phiếu quỹ": {
+        "account_number": "419"
+      },
+      "Lợi nhuận sau thuế chưa phân phối": {
+        "account_number": "421",
+        "Lợi nhuận sau thuế chưa phân phối năm trước": {
+          "account_number": "4211"
+        },
+        "Lợi nhuận sau thuế chưa phân phối năm nay": {
+          "account_number": "4212"
+        }
+      }
+    },
+    "Doanh thu": {
+      "root_type": "Income",
+      "is_group": 1,
+      "Doanh thu bán hàng và cung cấp dịch vụ": {
+        "account_number": "511",
+        "account_type": "Income Account",
+        "Doanh thu bán hàng hóa": {
+          "account_number": "5111",
+          "account_type": "Income Account"
+        },
+        "Doanh thu bán sản phẩm": {
+          "account_number": "5112",
+          "account_type": "Income Account"
+        },
+        "Doanh thu cung cấp dịch vụ": {
+          "account_number": "5113",
+          "account_type": "Income Account"
+        },
+        "Doanh thu khác": {
+          "account_number": "5118",
+          "account_type": "Income Account"
+        }
+      },
+      "Doanh thu hoạt động tài chính": {
+        "account_number": "515",
+        "account_type": "Income Account"
+      },
+      "Các khoản giảm trừ doanh thu": {
+        "account_number": "521",
+        "Chiết khấu thương mại": {
+          "account_number": "5211"
+        },
+        "Hàng bán bị trả lại": {
+          "account_number": "5212"
+        },
+        "Giảm giá hàng bán": {
+          "account_number": "5213"
+        }
+      }
+    },
+    "Chi phí sản xuất, kinh doanh": {
+      "root_type": "Expense",
+      "is_group": 1,
+      "Chi phí nguyên liệu, vật liệu trực tiếp": {
+        "account_number": "621",
+        "account_type": "Expense Account"
+      },
+      "Chi phí nhân công trực tiếp": {
+        "account_number": "622",
+        "account_type": "Expense Account"
+      },
+      "Chi phí sản xuất chung": {
+        "account_number": "627",
+        "account_type": "Expense Account",
+        "Chi phí nhân viên phân xưởng": {
+          "account_number": "6271"
+        },
+        "Chi phí vật liệu": {
+          "account_number": "6272"
+        },
+        "Chi phí dụng cụ sản xuất": {
+          "account_number": "6273"
+        },
+        "Chi phí khấu hao TSCĐ": {
+          "account_number": "6274",
+          "account_type": "Depreciation"
+        },
+        "Thuế, phí, lệ phí": {
+          "account_number": "6275"
+        },
+        "Chi phí dịch vụ mua ngoài": {
+          "account_number": "6277"
+        },
+        "Chi phí bằng tiền khác": {
+          "account_number": "6278"
+        }
+      },
+      "Giá vốn hàng bán": {
+        "account_number": "632",
+        "account_type": "Cost of Goods Sold"
+      },
+      "Chi phí tài chính": {
+        "account_number": "635",
+        "account_type": "Expense Account"
+      },
+      "Chi phí bán hàng": {
+        "account_number": "641",
+        "account_type": "Expense Account",
+        "Chi phí nhân viên": {
+          "account_number": "6411"
+        },
+        "Chi phí vật liệu, bao bì": {
+          "account_number": "6412"
+        },
+        "Chi phí dụng cụ, đồ dùng": {
+          "account_number": "6413"
+        },
+        "Chi phí khấu hao TSCĐ": {
+          "account_number": "6414",
+          "account_type": "Depreciation"
+        },
+        "Chi phí bảo hành": {
+          "account_number": "6415"
+        },
+        "Chi phí dịch vụ mua ngoài": {
+          "account_number": "6417"
+        },
+        "Chi phí bằng tiền khác": {
+          "account_number": "6418"
+        }
+      },
+      "Chi phí quản lý doanh nghiệp": {
+        "account_number": "642",
+        "account_type": "Expense Account",
+        "Chi phí nhân viên quản lý": {
+          "account_number": "6421"
+        },
+        "Chi phí vật liệu quản lý": {
+          "account_number": "6422"
+        },
+        "Chi phí đồ dùng văn phòng": {
+          "account_number": "6423"
+        },
+        "Chi phí khấu hao TSCĐ": {
+          "account_number": "6424",
+          "account_type": "Depreciation"
+        },
+        "Thuế, phí và lệ phí": {
+          "account_number": "6425"
+        },
+        "Chi phí dự phòng": {
+          "account_number": "6426"
+        },
+        "Chi phí dịch vụ mua ngoài": {
+          "account_number": "6427"
+        },
+        "Chi phí bằng tiền khác": {
+          "account_number": "6428",
+          "account_type": "Round Off"
+        }
+      }
+    },
+    "Thu nhập khác": {
+      "root_type": "Income",
+      "is_group": 1,
+      "Thu nhập khác": {
+        "account_number": "711",
+        "account_type": "Income Account"
+      }
+    },
+    "Chi phí khác": {
+      "root_type": "Expense",
+      "is_group": 1,
+      "Chi phí khác": {
+        "account_number": "811",
+        "account_type": "Expense Account"
+      },
+      "Chi phí thuế thu nhập doanh nghiệp": {
+        "account_number": "821",
+        "account_type": "Expense Account",
+        "Chi phí thuế TNDN": {
+          "account_number": "8211",
+          "Chi phí thuế TNDN hiện hành": {
+            "account_number": "82111"
+          },
+          "Chi phí thuế TNDN bổ sung theo quy định thuế tối thiểu toàn cầu": {
+            "account_number": "82112"
+          }
+        },
+        "Chi phí thuế TNDN hoãn lại": {
+          "account_number": "8212"
+        }
+      }
+    },
+    "Xác định kết quả kinh doanh": {
+      "root_type": "Expense",
+      "is_group": 1,
+      "Xác định kết quả kinh doanh": {
+        "account_number": "911"
+      }
+    }
+  }
+}
