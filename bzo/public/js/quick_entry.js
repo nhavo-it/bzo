@@ -2,10 +2,10 @@
 frappe.provide("frappe.ui.form");
 
 (() => {
-	// Empty Country counts as Vietnam; defaulting the field instead would make the whole address mandatory
+	// Empty Country also counts as Vietnam, in case the user clears the default
 	const VN = "eval:!doc.country_address || doc.country_address=='Vietnam'";
 	const NOT_VN = "eval:doc.country_address && doc.country_address!='Vietnam'";
-	const VN_REQD = "eval:doc.country_address=='Vietnam' || (!doc.country_address && doc.address_line1)";
+	const VN_REQD = "eval:(!doc.country_address || doc.country_address=='Vietnam') && doc.address_line1";
 	const PARTIES = ["Customer", "Supplier"];
 
 	// ERPNext usually aliases both to the shared ContactAddressQuickEntryForm, but some builds ship separate classes
@@ -35,12 +35,16 @@ frappe.provide("frappe.ui.form");
 					df.mandatory_depends_on = NOT_VN;
 				}
 				if (df.fieldname === "address_line1") {
+					// The default Country alone must not make the address mandatory
 					df.mandatory_depends_on =
-						"eval:doc.city || doc.country_address || doc.custom_province || doc.custom_ward";
+						"eval:doc.city || doc.custom_province || doc.custom_ward || (doc.country_address && doc.country_address!='Vietnam')";
+				}
+				if (df.fieldname === "country_address") {
+					df.default = "Vietnam";
 				}
 			}
 
-			const idx = fields.findIndex((df) => df.fieldname === "country_address");
+			const idx = fields.findIndex((df) => df.fieldname === "address_line1");
 			fields.splice(
 				idx === -1 ? fields.length : idx + 1,
 				0,
@@ -66,7 +70,11 @@ frappe.provide("frappe.ui.form");
 
 		proto.render_dialog = function () {
 			render_dialog.call(this);
-			if (PARTIES.includes(this.doctype)) bzo_bind_divisions(this.dialog);
+			if (!PARTIES.includes(this.doctype)) return;
+			if (!this.dialog.get_value("country_address")) {
+				this.dialog.set_value("country_address", "Vietnam");
+			}
+			bzo_bind_divisions(this.dialog);
 		};
 	}
 
