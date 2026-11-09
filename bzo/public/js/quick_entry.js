@@ -3,21 +3,7 @@ frappe.provide("frappe.ui.form");
 
 (() => {
 	const BZO_VN = "Vietnam";
-	// Empty Country also counts as Vietnam, in case the user clears the default
-	const VN = "eval:!doc.country_address || doc.country_address=='Vietnam'";
-	const NOT_VN = "eval:doc.country_address && doc.country_address!='Vietnam'";
-	const VN_REQD = "eval:(!doc.country_address || doc.country_address=='Vietnam') && doc.address_line1";
 	const PARTIES = ["Customer", "Supplier"];
-	const ADDRESS_ORDER = [
-		"address_line1",
-		"custom_province",
-		"custom_ward",
-		"country_address",
-		"address_line2",
-		"city",
-		"state",
-		"pincode",
-	];
 
 	// ERPNext usually aliases both to the shared ContactAddressQuickEntryForm, but some builds ship separate classes
 	const patched = new Set();
@@ -26,6 +12,12 @@ frappe.provide("frappe.ui.form");
 		if (!proto?.get_variant_fields || patched.has(proto)) continue;
 		patched.add(proto);
 		patch_party_quick_entry(proto);
+	}
+
+	// ERPNext v16 names the dialog's Country field `country_address`, v15 names it `country`
+	function country_fieldname(fields) {
+		const df = fields.find((f) => f.fieldtype === "Link" && f.options === "Country");
+		return df?.fieldname || "country_address";
 	}
 
 	function patch_party_quick_entry(proto) {
@@ -38,6 +30,12 @@ frappe.provide("frappe.ui.form");
 			if (!PARTIES.includes(this.doctype)) return fields;
 			if (fields.some((df) => df.fieldname === "custom_province")) return fields;
 
+			const c = country_fieldname(fields);
+			// Empty Country also counts as Vietnam, in case the user clears the default
+			const VN = `eval:!doc.${c} || doc.${c}=='${BZO_VN}'`;
+			const NOT_VN = `eval:doc.${c} && doc.${c}!='${BZO_VN}'`;
+			const VN_REQD = `eval:(!doc.${c} || doc.${c}=='${BZO_VN}') && doc.address_line1`;
+
 			for (const df of fields) {
 				if (["address_line2", "pincode", "city", "state"].includes(df.fieldname)) {
 					df.depends_on = NOT_VN;
@@ -47,19 +45,30 @@ frappe.provide("frappe.ui.form");
 				}
 				if (df.fieldname === "address_line1") {
 					// The default Country alone must not make the address mandatory
-					df.mandatory_depends_on =
-						"eval:doc.city || doc.custom_province || doc.custom_ward || (doc.country_address && doc.country_address!='Vietnam')";
+					df.mandatory_depends_on = `eval:doc.city || doc.custom_province || doc.custom_ward || (doc.${c} && doc.${c}!='${BZO_VN}')`;
 				}
-				if (df.fieldname === "country_address") {
-					df.default = "Vietnam";
+				if (df.fieldname === c) {
+					df.default = BZO_VN;
+					// v16 makes Country mandatory once City is set; City is filled from Ward here
+					df.mandatory_depends_on = NOT_VN;
 				}
 			}
 
+			const order = [
+				"address_line1",
+				"custom_province",
+				"custom_ward",
+				c,
+				"address_line2",
+				"city",
+				"state",
+				"pincode",
+			];
 			const first = fields.findIndex((df) => df.fieldname === "address_line1");
 			if (first === -1) return fields;
 			let last = first;
 			fields.forEach((df, i) => {
-				if (ADDRESS_ORDER.includes(df.fieldname)) last = i;
+				if (order.includes(df.fieldname)) last = i;
 			});
 
 			const by_name = Object.fromEntries(fields.map((df) => [df.fieldname, df]));
@@ -80,17 +89,18 @@ frappe.provide("frappe.ui.form");
 				mandatory_depends_on: VN_REQD,
 			};
 			// One column, so the VN layout has no empty right column
-			const block = ADDRESS_ORDER.map((name) => by_name[name]).filter(Boolean);
+			const block = order.map((name) => by_name[name]).filter(Boolean);
 			fields.splice(first, last - first + 1, ...block);
 			return fields;
 		};
 
 		proto.render_dialog = function () {
 			const is_party = PARTIES.includes(this.doctype);
-			if (is_party) preset_country(this, "country_address");
+			const c = is_party ? country_fieldname(get_variant_fields.call(this)) : null;
+			if (is_party) preset_country(this, c);
 			render_dialog.call(this);
 			if (!is_party) return;
-			ensure_country(this.dialog || this, "country_address");
+			ensure_country(this.dialog || this, c);
 			bzo_bind_divisions(this.dialog || this);
 		};
 	}
