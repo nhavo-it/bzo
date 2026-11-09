@@ -2,8 +2,10 @@
 frappe.provide("frappe.ui.form");
 
 (() => {
-	const VN = "eval:doc.country_address=='Vietnam'";
-	const NOT_VN = "eval:doc.country_address!='Vietnam'";
+	// Empty Country counts as Vietnam; defaulting the field instead would make the whole address mandatory
+	const VN = "eval:!doc.country_address || doc.country_address=='Vietnam'";
+	const NOT_VN = "eval:doc.country_address && doc.country_address!='Vietnam'";
+	const VN_REQD = "eval:doc.country_address=='Vietnam' || (!doc.country_address && doc.address_line1)";
 	const PARTIES = ["Customer", "Supplier"];
 
 	// ERPNext usually aliases both to the shared ContactAddressQuickEntryForm, but some builds ship separate classes
@@ -30,8 +32,11 @@ frappe.provide("frappe.ui.form");
 					df.depends_on = NOT_VN;
 				}
 				if (df.fieldname === "city") {
+					df.mandatory_depends_on = NOT_VN;
+				}
+				if (df.fieldname === "address_line1") {
 					df.mandatory_depends_on =
-						"eval:doc.country_address!='Vietnam' && (doc.country_address || doc.address_line1)";
+						"eval:doc.city || doc.country_address || doc.custom_province || doc.custom_ward";
 				}
 			}
 
@@ -45,7 +50,7 @@ frappe.provide("frappe.ui.form");
 					fieldtype: "Link",
 					options: "Province",
 					depends_on: VN,
-					mandatory_depends_on: VN,
+					mandatory_depends_on: VN_REQD,
 				},
 				{
 					label: __("Ward/Commune/Special Zone"),
@@ -53,7 +58,7 @@ frappe.provide("frappe.ui.form");
 					fieldtype: "Link",
 					options: "Ward",
 					depends_on: VN,
-					mandatory_depends_on: VN,
+					mandatory_depends_on: VN_REQD,
 				}
 			);
 			return fields;
