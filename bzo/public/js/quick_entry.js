@@ -2,6 +2,7 @@
 frappe.provide("frappe.ui.form");
 
 (() => {
+	const BZO_VN = "Vietnam";
 	// Empty Country also counts as Vietnam, in case the user clears the default
 	const VN = "eval:!doc.country_address || doc.country_address=='Vietnam'";
 	const NOT_VN = "eval:doc.country_address && doc.country_address!='Vietnam'";
@@ -85,16 +86,12 @@ frappe.provide("frappe.ui.form");
 		};
 
 		proto.render_dialog = function () {
-			if (PARTIES.includes(this.doctype) && this.doc && !this.doc.country_address) {
-				// The dialog reads its values from this.doc, so a field default alone is not shown
-				this.doc.country_address = "Vietnam";
-			}
+			const is_party = PARTIES.includes(this.doctype);
+			if (is_party) preset_country(this, "country_address");
 			render_dialog.call(this);
-			if (!PARTIES.includes(this.doctype)) return;
-			if (!this.dialog.get_value("country_address")) {
-				this.dialog.set_value("country_address", "Vietnam");
-			}
-			bzo_bind_divisions(this.dialog);
+			if (!is_party) return;
+			ensure_country(this.dialog || this, "country_address");
+			bzo_bind_divisions(this.dialog || this);
 		};
 	}
 
@@ -103,13 +100,24 @@ frappe.provide("frappe.ui.form");
 		frappe.ui.form.QuickEntryForm
 	) {
 		render_dialog() {
+			preset_country(this, "country");
 			super.render_dialog();
-			if (!this.dialog.get_value("country")) {
-				this.dialog.set_value("country", "Vietnam");
-			}
-			bzo_bind_divisions(this.dialog);
+			ensure_country(this.dialog || this, "country");
+			bzo_bind_divisions(this.dialog || this);
 		}
 	};
+
+	// QuickEntryForm.set_defaults() fills the inputs from this.doc, so the value has to be there before rendering
+	function preset_country(form, fieldname) {
+		form.check_quick_entry_doc?.();
+		if (form.doc) form.doc[fieldname] = BZO_VN;
+	}
+
+	function ensure_country(dialog, fieldname) {
+		if (dialog.get_value(fieldname) !== BZO_VN) {
+			dialog.set_value(fieldname, BZO_VN);
+		}
+	}
 
 	function bzo_bind_divisions(d) {
 		const province = d.fields_dict.custom_province;
