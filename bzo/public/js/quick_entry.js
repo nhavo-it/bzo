@@ -4,8 +4,9 @@ frappe.provide("frappe.ui.form");
 (() => {
 	const VN = "eval:doc.country_address=='Vietnam'";
 	const NOT_VN = "eval:doc.country_address!='Vietnam'";
+	const PARTIES = ["Customer", "Supplier"];
 
-	// ERPNext usually aliases both to ContactAddressQuickEntryForm, but some builds ship separate classes
+	// ERPNext usually aliases both to the shared ContactAddressQuickEntryForm, but some builds ship separate classes
 	const patched = new Set();
 	for (const name of ["ContactAddressQuickEntryForm", "CustomerQuickEntryForm", "SupplierQuickEntryForm"]) {
 		const proto = frappe.ui.form[name]?.prototype;
@@ -20,7 +21,8 @@ frappe.provide("frappe.ui.form");
 
 		proto.get_variant_fields = function () {
 			const fields = get_variant_fields.call(this);
-			if (this.doctype === "Supplier") return without_address_section(fields);
+			// The shared class also serves other doctypes; leave them as ERPNext ships them
+			if (!PARTIES.includes(this.doctype)) return fields;
 			if (fields.some((df) => df.fieldname === "custom_province")) return fields;
 
 			for (const df of fields) {
@@ -59,23 +61,8 @@ frappe.provide("frappe.ui.form");
 
 		proto.render_dialog = function () {
 			render_dialog.call(this);
-			bzo_bind_divisions(this.dialog);
+			if (PARTIES.includes(this.doctype)) bzo_bind_divisions(this.dialog);
 		};
-	}
-
-	// Drop the "Primary Address Details" section: its Section Break through the last address field
-	function without_address_section(fields) {
-		const first = fields.findIndex((df) => df.fieldname === "address_line1");
-		if (first === -1) return fields;
-		let start = first;
-		while (start > 0 && fields[start - 1].fieldtype !== "Section Break") start--;
-		if (start > 0) start--;
-		const address = ["address_line1", "address_line2", "pincode", "city", "state", "country_address", "custom_province", "custom_ward"];
-		let end = start;
-		for (let i = start; i < fields.length; i++) {
-			if (address.includes(fields[i].fieldname)) end = i;
-		}
-		return [...fields.slice(0, start), ...fields.slice(end + 1)];
 	}
 
 	// Quick Entry cua chinh Address (vd. "+ Tao Address" tu o Link)

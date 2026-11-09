@@ -1,14 +1,14 @@
 app_name = "bzo"
 app_title = "Bzo"
 app_publisher = "Bzo"
-app_description = "Tuy chinh ERPNext 16"
-app_email = "dev@example.com"
+app_description = "Điều chỉnh"
+app_email = "nhavv.cto@gmail.com"
 app_license = "mit"
 
 # Ung dung phu thuoc
 required_apps = ["frappe", "erpnext"]
 
-# Quick Entry Customer/Supplier: them Tinh/Thanh + Xa/Phuong
+# Quick Entry Customer/Supplier + Address: them Tinh/Thanh + Xa/Phuong
 app_include_js = "/assets/bzo/js/quick_entry.js"
 
 # JS mo rong form cua DocType co san
@@ -24,6 +24,9 @@ doc_events = {
 	"Customer": {
 		"before_insert": "bzo.address.address.set_quick_entry_divisions",
 		"validate": "bzo.customer.customer.validate",
+	},
+	"Supplier": {
+		"before_insert": "bzo.address.address.set_quick_entry_divisions",
 	},
 	"Address": {
 		"validate": "bzo.address.address.validate",
